@@ -70,7 +70,7 @@ public class TitanNodeApi {
         payload.addProperty("egg", 16);
         // Use Java 21 runtime instead of Java 17
         payload.addProperty("docker_image", "ghcr.io/pterodactyl/yolks:java_21");
-        payload.addProperty("startup", "java -Xms128M -Xmx{{SERVER_MEMORY}}M -jar server.jar nogui");
+        payload.addProperty("startup", "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}");
         payload.addProperty("node", NODE_ID);
         payload.add("environment", env);
         payload.add("limits", limits);
