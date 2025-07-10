@@ -57,12 +57,19 @@ public class TitanNodeApi {
         allocation.addProperty("default", allocationId);
 
         JsonObject env = new JsonObject();
+        // Required environment variables for the "OpInsel" egg.
+        // These are typically needed when creating Paper/Spigot servers via the
+        // Pterodactyl API. Without them the API will return a validation error
+        // that the fields are missing.
+        env.addProperty("SERVER_JARFILE", "server.jar");
+        env.addProperty("BUILD_NUMBER", "latest");
 
         JsonObject payload = new JsonObject();
         payload.addProperty("name", name);
         payload.addProperty("user", 1); // default user id
         payload.addProperty("egg", 16);
-        payload.addProperty("docker_image", "ghcr.io/parkervcp/yolks:java_17");
+        // Use Java 21 runtime instead of Java 17
+        payload.addProperty("docker_image", "ghcr.io/pterodactyl/yolks:java_21");
         payload.addProperty("startup", "java -Xms128M -Xmx{{SERVER_MEMORY}}M -jar server.jar nogui");
         payload.addProperty("node", NODE_ID);
         payload.add("environment", env);
