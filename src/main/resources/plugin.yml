@@ -1,0 +1,10 @@
+name: ServerCreate
+main: net.devvoxel.ServerCreate.ServerCreate
+version: 1.0
+api-version: 1.21
+author: DerGamer09
+description: Simple server management plugin
+commands:
+  server:
+    description: Manage custom servers
+    usage: /server <create|join|addtime|settime>
