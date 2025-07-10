@@ -9,8 +9,10 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
 public class TitanNodeApi {
-    private static final String API_URL = "https://cp.titannode.de/api/application";
-    private static final String API_KEY = "ptla_rwkxfDT9LWbvYLGvXz3sdMcqORSSv1JREsGvnsgkazv";
+    private static final String APP_API_URL = "https://cp.titannode.de/api/application";
+    private static final String CLIENT_API_URL = "https://cp.titannode.de/api/client";
+    private static final String APP_API_KEY = "ptla_rwkxfDT9LWbvYLGvXz3sdMcqORSSv1JREsGvnsgkazv";
+    private static final String CLIENT_API_KEY = "ptlc_26zZRH3HsY0HvFuE8HcxKPp5Zl6iFQQn3BxTwlQGmUR";
     /** The node on which new servers will be created. */
     private static final int NODE_ID = 1;
 
@@ -19,8 +21,8 @@ public class TitanNodeApi {
 
     private int getFreeAllocation(int nodeId) throws IOException, InterruptedException {
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(API_URL + "/nodes/" + nodeId + "/allocations"))
-                .header("Authorization", "Bearer " + API_KEY)
+                .uri(URI.create(APP_API_URL + "/nodes/" + nodeId + "/allocations"))
+                .header("Authorization", "Bearer " + APP_API_KEY)
                 .header("Accept", "application/json")
                 .build();
 
@@ -78,8 +80,8 @@ public class TitanNodeApi {
         payload.add("allocation", allocation);
 
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(API_URL + "/servers"))
-                .header("Authorization", "Bearer " + API_KEY)
+                .uri(URI.create(APP_API_URL + "/servers"))
+                .header("Authorization", "Bearer " + APP_API_KEY)
                 .header("Content-Type", "application/json")
                 .header("Accept", "application/json")
                 .POST(HttpRequest.BodyPublishers.ofString(gson.toJson(payload)))
@@ -104,5 +106,23 @@ public class TitanNodeApi {
         }
 
         return new ServerInfo(name, mode, serverId, returnedAllocationId);
+    }
+
+    public void startServer(int serverId) throws IOException, InterruptedException {
+        JsonObject payload = new JsonObject();
+        payload.addProperty("signal", "start");
+
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(CLIENT_API_URL + "/servers/" + serverId + "/power"))
+                .header("Authorization", "Bearer " + CLIENT_API_KEY)
+                .header("Content-Type", "application/json")
+                .header("Accept", "application/json")
+                .POST(HttpRequest.BodyPublishers.ofString(gson.toJson(payload)))
+                .build();
+
+        HttpResponse<String> response = http.send(request, HttpResponse.BodyHandlers.ofString());
+        if (response.statusCode() != 202 && response.statusCode() != 204) {
+            throw new IOException("Failed to start server: " + response.body());
+        }
     }
 }

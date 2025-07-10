@@ -11,9 +11,12 @@ mvn package
 ```
 
 The resulting jar can be found in `target/` and placed into your server's `plugins` directory.
-The plugin requires internet access so it can reach the TitanNode API. The admin API key is currently embedded in the source but can be changed in `TitanNodeApi.java`.
+The plugin requires internet access so it can reach the TitanNode API. Both the
+admin and user API keys are embedded in `TitanNodeApi.java` and can be changed
+there if needed.
 
 By default new servers are created with 4 GB RAM, 16 GB disk space and use the "OpInsel" egg. The default allocation returned by TitanNode is stored in a local SQLite database.
+Newly created servers are automatically started once the creation process is complete.
 
 ## Commands
 
