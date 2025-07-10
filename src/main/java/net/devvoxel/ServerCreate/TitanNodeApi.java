@@ -92,8 +92,17 @@ public class TitanNodeApi {
         JsonObject obj = gson.fromJson(response.body(), JsonObject.class);
         JsonObject attrs = obj.getAsJsonObject("attributes");
         int serverId = attrs.get("id").getAsInt();
-        JsonObject allocationObj = attrs.getAsJsonObject("allocation");
-        int returnedAllocationId = allocationObj.get("id").getAsInt();
+
+        int returnedAllocationId;
+        var allocationElem = attrs.get("allocation");
+        if (allocationElem.isJsonObject()) {
+            returnedAllocationId = allocationElem.getAsJsonObject()
+                    .get("id")
+                    .getAsInt();
+        } else {
+            returnedAllocationId = allocationElem.getAsInt();
+        }
+
         return new ServerInfo(name, mode, serverId, returnedAllocationId);
     }
 }
