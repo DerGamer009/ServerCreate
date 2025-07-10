@@ -1,8 +1,10 @@
 name: ServerCreate
 main: net.devvoxel.ServerCreate.ServerCreate
-version: 1.0
+version: 1.0.0
 api-version: 1.21
-author: DerGamer09
+authors:
+  - DerGamer09
+  - NilsCraftHD
 description: Simple server management plugin
 commands:
   server:
