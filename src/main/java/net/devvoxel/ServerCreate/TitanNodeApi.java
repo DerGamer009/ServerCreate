@@ -60,7 +60,7 @@ public class TitanNodeApi {
         JsonObject attrs = obj.getAsJsonObject("attributes");
         int serverId = attrs.get("id").getAsInt();
         JsonObject allocationObj = attrs.getAsJsonObject("allocation");
-        int allocation = allocationObj.get("id").getAsInt();
-        return new ServerInfo(name, mode, serverId, allocation);
+        int allocationId = allocationObj.get("id").getAsInt();
+        return new ServerInfo(name, mode, serverId, allocationId);
     }
 }
