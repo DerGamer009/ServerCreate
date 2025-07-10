@@ -26,18 +26,23 @@ public class TitanNodeApi {
         JsonObject features = new JsonObject();
         features.addProperty("databases", 1);
         features.addProperty("allocations", 1);
+        features.addProperty("backups", 0);
+
+        JsonObject allocation = new JsonObject();
+        allocation.addProperty("default", 1);
 
         JsonObject env = new JsonObject();
 
         JsonObject payload = new JsonObject();
         payload.addProperty("name", name);
         payload.addProperty("user", 1); // default user id
-        payload.addProperty("egg", "OpInsel");
+        payload.addProperty("egg", 16);
         payload.addProperty("docker_image", "ghcr.io/parkervcp/yolks:java_17");
         payload.addProperty("startup", "java -Xms128M -Xmx{{SERVER_MEMORY}}M -jar server.jar nogui");
         payload.add("environment", env);
         payload.add("limits", limits);
         payload.add("feature_limits", features);
+        payload.add("allocation", allocation);
 
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(API_URL + "/servers"))
