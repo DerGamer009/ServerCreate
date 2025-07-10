@@ -56,7 +56,13 @@ public class ServerCommand implements CommandExecutor {
             ServerInfo info = plugin.getApi().createServer(name, mode);
             plugin.getServers().put(name, info);
             plugin.getDatabase().addServer(info);
-            sender.sendMessage("Created server " + name + " (ID " + info.getServerId() + ") with mode " + mode + ".");
+            sender.sendMessage("Created server " + name + " (ID " + info.getServerId() + ") with mode " + mode + ". Starting now...");
+
+            try {
+                plugin.getApi().startServer(info.getServerId());
+            } catch (IOException | InterruptedException startEx) {
+                sender.sendMessage("Failed to start server: " + startEx.getMessage());
+            }
         } catch (IOException | InterruptedException | SQLException e) {
             sender.sendMessage("Failed to create server: " + e.getMessage());
         }
